@@ -1,8 +1,10 @@
-
-export default function Home() {
+import CreateProductFab from "./products/create-product/create-product-fab";
+import Products from "./products/products";
+export default async function Home() {
   return (
-    <div>
-      <h1>Hellooo</h1>
-    </div>
+    <>
+      <Products />
+      <CreateProductFab />
+    </>
   );
 }
