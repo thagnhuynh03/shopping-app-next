@@ -1,5 +1,3 @@
-export const dynamic = "force-dynamic";
-
 import { Stack, Typography } from "@mui/material";
 import getProduct from "./get-product";
 import Image from "next/image";
@@ -13,12 +11,9 @@ interface SingleProductProps {
 
 export default async function SingleProduct({ params }: SingleProductProps) {
 
-  const productId = Number(params?.productId);
+  const { productId } = await params;
 
-  if (isNaN(productId)) {
-    throw new Error("Invalid product ID");
-  }
-  const product = await getProduct(productId);
+  const product = await getProduct(+productId);
 
   return (
     <Grid container marginBottom={"2rem"} rowGap={3}>
