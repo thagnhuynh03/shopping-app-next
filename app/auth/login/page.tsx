@@ -12,7 +12,7 @@ export default function Signup() {
         <TextField name="email" label="Email" variant="outlined" type="email" error={!!state.error} helperText={state.error}/>
         <TextField name="password" label="Password" variant="outlined" type="password" error={!!state.error} helperText={state.error}/>
         <Button variant="contained" type="submit">Login</Button>
-        <Link component={NextLink} href="/auth/signup" className="self-center">Don't have an account? Signup</Link>
+        <Link component={NextLink} href="/auth/signup" className="self-center">Don&apos;t have an account? Signup</Link>
         </Stack>
     </form>
     
