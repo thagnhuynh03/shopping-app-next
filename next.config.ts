@@ -4,9 +4,10 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'shopping-otkd.onrender.com',
-        pathname: '/images/**',
+        // protocol: 'https',
+        // hostname: 'shopping-otkd.onrender.com',
+        // pathname: '/images/**',
+        hostname: 'localhost'
       },
     ],
   },

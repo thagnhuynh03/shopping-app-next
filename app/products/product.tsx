@@ -1,8 +1,7 @@
 "use client";
 
-import { Card, CardActionArea, Stack, Typography } from "@mui/material";
+import { Card, CardActionArea, CardContent, CardMedia, Stack, Typography } from "@mui/material";
 import { Product as IProduct } from "./interfaces/product.interface";
-import Image from "next/image";
 import { API_URL } from "../constants/api";
 import { useRouter } from "next/navigation";
 
@@ -14,21 +13,37 @@ export default function Product({ product }: ProductProps) {
   const router = useRouter();
   return (
     <CardActionArea onClick={() => router.push(`/products/${product.id}`)}>
-      <Card className="p-4">
-            <Stack gap={3}>
-              <Typography variant="h4">{product.name}</Typography>
-              {product.imageExists && (
-                <Image
-                  src={`${API_URL}/images/products/${product.id}.jpeg`}
-                  width="0"
-                  height="0"
-                  className="w-full h-auto"
-                  sizes="100vw"
-                  alt="Picture of the product"
-                />
+      <Card>
+            <Stack gap={1}>
+              { product.imageExists && (
+                  <CardMedia
+                  component="img"
+                  alt= "Picture of the product"
+                  sx={{
+                    height: 300,
+                    objectFit: "cover"        // Đảm bảo hình ảnh không bị méo, cắt cho vừa khung
+                  }}
+                
+                  image={`${API_URL}/images/products/${product.id}.jpeg`} />
               )}
-              <Typography>{product.description}</Typography>
-              <Typography>${product.price}</Typography>
+              <CardContent>
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  component="div"
+                  sx={{
+                    height: 100,
+                    overflow: "hidden",
+                    display: "-webkit-box",
+                    WebkitLineClamp: 3,
+                    WebkitBoxOrient: "vertical"
+                  }}
+                >
+                  {product.name}
+                </Typography>
+                <Typography>${product.price}</Typography>
+              </CardContent>
+              
             </Stack>
           </Card>
     </CardActionArea>

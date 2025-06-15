@@ -39,10 +39,10 @@ export default function ProductsGrid({ products }: ProductGridProps) {
 
 
   return (
-    <Grid container spacing={3} sx={{ height: "85vh", overflow: "scroll" }}>
+    <Grid container spacing={3} >
     { products?.length > 0 &&
     products.map((product) => (
-      <Grid key={product.id} size={{ xs: 12, sm: 6, md: 4 }}>
+      <Grid key={product.id} size={{ xs: 12, sm: 6, md: 3 }}>
         <Product product={product} />
       </Grid>
     ))}

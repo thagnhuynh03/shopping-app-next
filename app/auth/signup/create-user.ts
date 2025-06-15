@@ -10,6 +10,6 @@ export default async function createUser(_prevState: FormResponse, formData: For
         return { error };
     }
 
-    redirect("/");
+    redirect("/auth/login");
 }
 
