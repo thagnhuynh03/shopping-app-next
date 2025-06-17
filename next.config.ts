@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'shopping-otkd.onrender.com',
+        hostname: 'shopping-app-nest.onrender.com',
         pathname: '/images/**',
       },
     ],
