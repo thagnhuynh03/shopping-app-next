@@ -1,4 +1,3 @@
-
 "use client";
 
 import AppBar from "@mui/material/AppBar";
@@ -19,6 +18,7 @@ import { MouseEvent, useContext, useState } from "react";
 import Link from "next/link";
 import { routes, unauthenticatedRoutes } from "../constants/routes";
 import { useRouter } from "next/navigation";
+import Loader from "../components/loader";
 
 interface HeaderProps {
   logout: () => Promise<void>;
@@ -151,6 +151,7 @@ export default function Header({ logout }: HeaderProps) {
 
 const Settings = ({ logout }: HeaderProps) => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -162,6 +163,7 @@ const Settings = ({ logout }: HeaderProps) => {
 
   return (
     <Box sx={{ flexGrow: 0 }}>
+      {loading && <Loader />}
       <Tooltip title="Open settings">
         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
           <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
@@ -186,7 +188,9 @@ const Settings = ({ logout }: HeaderProps) => {
         <MenuItem
           key="Logout"
           onClick={async () => {
+            setLoading(true);
             await logout();
+            setLoading(false);
             handleCloseUserMenu();
           }}
         >

@@ -41,6 +41,7 @@ export default function CreateProductModal({
 }: CreateProductModalProps) {
   const [response, setResponse] = useState<FormResponse>();
   const [fileName, setFileName] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const onClose = () => {
     setResponse(undefined);
@@ -53,12 +54,15 @@ export default function CreateProductModal({
         <form
           className="w-full max-w-xs"
           action={async (formData) => {
+            setLoading(true);
             const response = await createProduct(formData);
+            setLoading(false);
             setResponse(response);
             if (!response.error) {
               onClose();
             }
           }}
+          onSubmit={() => setLoading(true)}
         >
           <Stack spacing={2}>
             <TextField
@@ -102,7 +106,7 @@ export default function CreateProductModal({
             </Button>
             <Typography>{fileName}</Typography>
             <Button type="submit" variant="contained">
-              Submit
+              {loading ? 'Creating...' : 'Submit'}
             </Button>
           </Stack>
         </form>

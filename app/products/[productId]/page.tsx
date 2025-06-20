@@ -5,12 +5,7 @@ import { getProductImage } from "../product-image";
 import Grid from "@mui/material/Grid";
 import Checkout from "@/app/checkout/checkout";
 
-// interface SingleProductProps {
-//   params: { productId: string };
-// }
-
 export default async function SingleProduct({ params }:  {params: Promise<{ productId: string }>}) {
-
   const { productId } = await params;
 
   const product = await getProduct(+productId);
