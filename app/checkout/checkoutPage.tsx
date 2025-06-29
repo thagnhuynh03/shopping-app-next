@@ -111,7 +111,7 @@ export default function Checkout({ cart, addresses }: CheckoutProps) {
 
           {/* Right: Order Summary */}
           <Paper sx={{ flex: 2, p: 3 }}>
-            <Typography variant="h6" mb={2}>Đơn hàng ({cart.length} sản phẩm)</Typography>
+            <Typography variant="h6" mb={2}>Order ({cart.length} pruducts)</Typography>
             {cart.map((item: CartItem) => (
               <Box key={item.id} display="flex" alignItems="center" mb={2}>
                 <Image
@@ -132,19 +132,19 @@ export default function Checkout({ cart, addresses }: CheckoutProps) {
               </Box>
             ))}
             <Box display="flex" justifyContent="space-between" mt={2}>
-              <Typography>Tạm tính</Typography>
+              <Typography>Subtotal</Typography>
               <Typography>${subtotal.toLocaleString()}</Typography>
             </Box>
             <Box display="flex" justifyContent="space-between">
-              <Typography>Phí vận chuyển</Typography>
+              <Typography>Shipping fee</Typography>
               <Typography>${shippingFee.toLocaleString()}</Typography>
             </Box>
             <Box display="flex" justifyContent="space-between" mt={2}>
-              <Typography fontWeight="bold">Tổng cộng</Typography>
+              <Typography fontWeight="bold">Total</Typography>
               <Typography fontWeight="bold" color="primary">${total.toLocaleString()}</Typography>
             </Box>
             <Button fullWidth variant="contained" color="primary" sx={{ mt: 3 }} type="submit">
-              ĐẶT HÀNG
+              Place order
             </Button>
           </Paper>
         </Box>

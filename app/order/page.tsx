@@ -17,7 +17,7 @@ export default async function OrderPage() {
 
   // Filter orders by status
   const pendingOrders = orders.filter(order => order.status === 'pending');
-  const waitingForDeliveryOrders = orders.filter(order => order.status === 'waiting for delivery');
+  const waitingForDeliveryOrders = orders.filter(order => order.status === 'Waiting for delivery');
   const shippingOrders = orders.filter(order => order.status === 'shipping');
   const deliveredOrders = orders.filter(order => order.status === 'delivered');
   const cancelledOrders = orders.filter(order => order.status === 'cancelled');
