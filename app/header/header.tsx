@@ -14,21 +14,48 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { AuthContext } from "../auth/auth-context";
-import { MouseEvent, useContext, useState } from "react";
+import { MouseEvent, useContext, useState, useEffect } from "react";
 import Link from "next/link";
 import { routes, unauthenticatedRoutes } from "../constants/routes";
 import { useRouter } from "next/navigation";
 import Loader from "../components/loader";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import Badge from "@mui/material/Badge";
+import { styled } from "@mui/material/styles";
+import { API_URL } from "../constants/api";
 
 interface HeaderProps {
   logout: () => Promise<void>;
 }
+
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    right: -3,
+    top: 13,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: '0 4px',
+  },
+}));
 
 export default function Header({ logout }: HeaderProps) {
   const isAuthenticated = useContext(AuthContext);
   const router = useRouter();
 
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    async function fetchCartCount() {
+      try {
+        const res = await fetch(`${API_URL}/cart`, { credentials: 'include' });
+        const data = await res.json();
+        setCartCount(Array.isArray(data) ? data.length : 0);
+      } catch {
+        setCartCount(0);
+      }
+    }
+    fetchCartCount();
+  }, [isAuthenticated]);
 
   const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -142,6 +169,15 @@ export default function Header({ logout }: HeaderProps) {
               </Button>
             ))}
           </Box>
+          <Box sx={{ flexGrow: 0, mr: 2 }}>
+            {isAuthenticated && (
+              <IconButton aria-label="cart" color="inherit" component={Link} href="/cart">
+                <StyledBadge badgeContent={cartCount} color="secondary">
+                  <ShoppingCartIcon />
+                </StyledBadge>
+              </IconButton>
+            )}
+          </Box>
           {isAuthenticated && <Settings logout={logout} />}
         </Toolbar>
       </Container>
@@ -152,6 +188,7 @@ export default function Header({ logout }: HeaderProps) {
 const Settings = ({ logout }: HeaderProps) => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
@@ -185,6 +222,15 @@ const Settings = ({ logout }: HeaderProps) => {
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >
+        <MenuItem
+          key="Order"
+          onClick={() => {
+            handleCloseUserMenu();
+            router.push("/order");
+          }}
+        >
+          <Typography textAlign="center">Order</Typography>
+        </MenuItem>
         <MenuItem
           key="Logout"
           onClick={async () => {

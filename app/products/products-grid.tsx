@@ -8,6 +8,8 @@ import { io, Socket } from "socket.io-client";
 import { API_URL } from "../constants/api";
 import revalidateProducts from "./actions/revalidate-products";
 import getAuthentication from "../auth/get-authentication";
+import { Typography, Box } from "@mui/material";
+
 interface ProductGridProps {
   products: IProduct[];
 }
@@ -39,13 +41,22 @@ export default function ProductsGrid({ products }: ProductGridProps) {
 
 
   return (
-    <Grid container spacing={3} >
-    { products?.length > 0 &&
-    products.map((product) => (
-      <Grid key={product.id} size={{ xs: 12, sm: 6, md: 3 }}>
-        <Product product={product} />
-      </Grid>
-    ))}
-  </Grid>
+    <>
+      {products?.length > 0 ? (
+        <Grid container spacing={3} >
+          {products.map((product) => (
+            <Grid key={product.id} size={{ xs: 12, sm: 6, md: 3 }}>
+              <Product product={product} />
+            </Grid>
+          ))}
+        </Grid>
+      ) : (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
+          <Typography variant="h6" color="text.secondary">
+            No products found
+          </Typography>
+        </Box>
+      )}
+    </>
   );
 }

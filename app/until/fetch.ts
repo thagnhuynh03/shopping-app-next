@@ -9,10 +9,24 @@ export const getHeaders = async () => {
   };
 };
 
-export const post = async (path: string, data: FormData | object) => {
+export const post = async (path: string, data?: FormData | object) => {
   const body = data instanceof FormData ? Object.fromEntries(data) : data;
   const res = await fetch(`${API_URL}/${path}`, {
     method: "POST",
+    headers: { "Content-Type": "application/json", ...(await getHeaders()) },
+    body: JSON.stringify(body),
+  });
+  const parsedRes = await res.json();
+  if (!res.ok) {
+    return { error: getErrorMessage(parsedRes) };
+  }
+  return { error: "", data: parsedRes };
+};
+
+export const put = async (path: string, data?: FormData | object) => {
+  const body = data instanceof FormData ? Object.fromEntries(data) : data;
+  const res = await fetch(`${API_URL}/${path}`, {
+    method: "PUT",
     headers: { "Content-Type": "application/json", ...(await getHeaders()) },
     body: JSON.stringify(body),
   });
@@ -31,4 +45,16 @@ export const get = async <T>(path: string, tags?: string[], params?: URLSearchPa
   });
 
   return await res.json() as T;
+}
+
+export const del = async (path: string) => {
+  const res = await fetch(`${API_URL}/${path}`, {
+    method: "DELETE",
+    headers: { ...(await getHeaders()) },
+  });
+  const parsedRes = await res.json();
+  if (!res.ok) {
+    return { error: getErrorMessage(parsedRes) };
+  }
+  return { error: "", data: parsedRes };
 }

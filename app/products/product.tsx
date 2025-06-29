@@ -24,7 +24,7 @@ export default function Product({ product }: ProductProps) {
     <>
       {loading && <Loader />}
       <CardActionArea onClick={handleClick}>
-        <Card>
+        <Card sx={{ height: 400 }}>
           <Stack gap={1}>
             {product.imageExists && (
               <CardMedia
@@ -34,7 +34,8 @@ export default function Product({ product }: ProductProps) {
                   height: 250,
                   objectFit: "cover"        // Đảm bảo hình ảnh không bị méo, cắt cho vừa khung
                 }}
-                image={`${API_URL}/images/products/${product.id}.jpeg`} />
+                image={`${API_URL}/images/products/${product.id}.jpg`}
+              />
             )}
             <CardContent>
               <Typography

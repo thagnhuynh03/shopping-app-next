@@ -4,13 +4,14 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        // protocol: 'https',
-        // hostname: 'shopping-app-nest.onrender.com',
-        // pathname: '/images/**',
-        protocol: 'http',
-        hostname: 'localhost',
-        port: '8080',
+        protocol: 'https',
+        hostname: 'shopping-app-nest.onrender.com',
         pathname: '/images/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
+        pathname: '/**',
       },
     ],
   },

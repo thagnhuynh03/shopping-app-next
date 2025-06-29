@@ -14,18 +14,22 @@ export default function ProductsPagination({ totalPages, currentPage }: { totalP
   };
 
   return (
-    <Stack direction="row" justifyContent="center" mt={4}>
-      <Pagination
-        page={currentPage}
-        count={totalPages}
-        renderItem={(item) => (
-          <PaginationItem
-            component={Link}
-            href={createPageURL(item.page as number)}
-            {...item}
+    <>
+      {totalPages > 1 && (
+        <Stack direction="row" justifyContent="center" mt={4}>
+          <Pagination
+            page={currentPage}
+            count={totalPages}
+            renderItem={(item) => (
+              <PaginationItem
+                component={Link}
+                href={createPageURL(item.page as number)}
+                {...item}
+              />
+            )}
           />
-        )}
-      />
-    </Stack>
+        </Stack>
+      )}
+    </>
   );
 }
