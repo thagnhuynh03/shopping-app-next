@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { getOrders } from './get-orders';
+import { getOrders } from './action/get-orders';
 import OrderTabs from './OrderTabs';
 
 export default async function OrderPage() {

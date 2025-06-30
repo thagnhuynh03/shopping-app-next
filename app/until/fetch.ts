@@ -58,3 +58,17 @@ export const del = async (path: string) => {
   }
   return { error: "", data: parsedRes };
 }
+
+export const patch = async (path: string, data?: FormData | object) => {
+  const body = data instanceof FormData ? Object.fromEntries(data) : data;
+  const res = await fetch(`${API_URL}/${path}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", ...(await getHeaders()) },
+    body: JSON.stringify(body),
+  });
+  const parsedRes = await res.json();
+  if (!res.ok) {
+    return { error: getErrorMessage(parsedRes) };
+  }
+  return { error: "", data: parsedRes };
+};

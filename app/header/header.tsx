@@ -22,7 +22,7 @@ import Loader from "../components/loader";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Badge from "@mui/material/Badge";
 import { styled } from "@mui/material/styles";
-import { API_URL } from "../constants/api";
+import { getCarts } from "../cart/get-carts";
 
 interface HeaderProps {
   logout: () => Promise<void>;
@@ -47,8 +47,7 @@ export default function Header({ logout }: HeaderProps) {
   useEffect(() => {
     async function fetchCartCount() {
       try {
-        const res = await fetch(`${API_URL}/cart`, { credentials: 'include' });
-        const data = await res.json();
+        const data = await getCarts();
         setCartCount(Array.isArray(data) ? data.length : 0);
       } catch {
         setCartCount(0);

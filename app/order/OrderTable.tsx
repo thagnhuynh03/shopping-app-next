@@ -17,6 +17,8 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { getProductImage } from '../products/product-image';
 import { Order } from './interfaces/order.interface';
 import Image from "next/image";
+import Button from '@mui/material/Button';
+import { cancelOrder } from './action/cancel-order';
 
 type Province = { code: number; name: string; };
 type District = { code: number; name: string; districts?: District[]; };
@@ -121,6 +123,20 @@ function OrderRow({ order }: { order: Order }) {
           {new Date(order.createdAt).toISOString().split('T')[0].split('-').reverse().join('/')}
         </TableCell>
         <TableCell align="right">{order.paymentMethod.name}</TableCell>
+        <TableCell align="right">
+          {order.status === "pending" && (
+            <Button
+              variant="outlined"
+              color="error"
+              size="small"
+              onClick={async () => {
+                await cancelOrder(order.id);
+              }}
+            >
+              Cancel Order
+            </Button>
+          )}
+        </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -196,6 +212,7 @@ export default function OrderTable({ orders }: OrderTableProps) {
             <TableCell align="right">Status</TableCell>
             <TableCell align="right">Date</TableCell>
             <TableCell align="right">Payment Method</TableCell>
+            <TableCell align="right"></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

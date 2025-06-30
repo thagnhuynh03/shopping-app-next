@@ -1,12 +1,16 @@
+"use server";
+import { revalidateTag } from "next/cache";
 import { get, post, put } from "../until/fetch";
 import { CartItem } from "./interface/cart.interface";
 
 export async function getCarts(): Promise<CartItem[]> {
-  return await get("cart") as CartItem[];
+  return await get("cart", ["cart"]) as CartItem[];
 }
 
 export async function addToCart(productSizeId: number, quantity: number, price: number) {
-  return await post("cart", { productSizeId, quantity, price });
+  const result = await post("cart", { productSizeId, quantity, price });
+  revalidateTag("cart");
+  return result;
 }
 
 export async function removeFromCart(cartItemId: number) {

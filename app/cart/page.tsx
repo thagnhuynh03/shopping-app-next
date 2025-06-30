@@ -69,6 +69,9 @@ export default async function CartPage() {
 
   return (
     <>
+      <Typography variant="h4" component="h1" sx={{ mt: 4, mb: 2, fontWeight: 'bold', textAlign: 'center' }}>
+        Shopping Cart
+      </Typography>
       <TableContainer component={Paper} sx={{ mt: 4 }}>
         <Table sx={{ minWidth: 700 }} aria-label="cart table">
           <TableHead>

@@ -76,8 +76,10 @@ export default function ProductDetailsClient({ product, images, addToCart }: Pro
     try {
       console.log(selectedProductSize.id);
       const res = await addToCart(selectedProductSize.id, quantity, selectedProductSize.price);
+
       if (res && !res.error) {
         setSnackbar({ open: true, message: "Added to cart!", severity: "success" });
+        window.location.reload();
       } else {
         setSnackbar({ open: true, message: res.error || "Failed to add to cart", severity: "error" });
       }
@@ -128,20 +130,20 @@ export default function ProductDetailsClient({ product, images, addToCart }: Pro
           <Box gap={2}>
             <Typography variant="h6" fontWeight='bold' mb={1}>Quantity</Typography>
             <QuantitySelector max={selectedProductSize?.stock ?? 1} value={quantity} onChange={setQuantity} />
-            {/* Custom quantity input for add to cart */}
-            <Box mt={1}>
+          </Box>
+          <Box mt={1}>
               <Button
+                fullWidth
                 variant="contained"
                 color="primary"
                 size="large"
-                sx={{ flex: 1, borderRadius: 2 }}
+                sx={{ borderRadius: 2 }}
                 disabled={!selectedProductSize || selectedProductSize.stock === 0 || loading}
                 onClick={handleAddToCart}
               >
                 {loading ? "Adding..." : "Add to Cart"}
               </Button>
             </Box>
-          </Box>
         </Stack>
       </Grid>
       <Snackbar

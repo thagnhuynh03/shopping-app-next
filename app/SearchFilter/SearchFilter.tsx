@@ -15,9 +15,9 @@ export default function SearchFilter() {
   const { replace } = useRouter();
 
   const min = Number(searchParams.get("minPrice")) || 0;
-  const max = Number(searchParams.get("maxPrice")) || 1000;
+  const max = Number(searchParams.get("maxPrice")) || 300;
 
-  const [priceRange, setPriceRange] = useState<number[]>([0, 1000]);
+  const [priceRange, setPriceRange] = useState<number[]>([0, 300]);
   const [mounted, setMounted] = useState(false);
   const [isPending, startTransition] = useTransition();
 
