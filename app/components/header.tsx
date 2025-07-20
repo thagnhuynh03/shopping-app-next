@@ -18,11 +18,12 @@ import { MouseEvent, useContext, useState, useEffect } from "react";
 import Link from "next/link";
 import { routes, unauthenticatedRoutes } from "../constants/routes";
 import { useRouter } from "next/navigation";
-import Loader from "../components/loader";
+import Loader from "./loader";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Badge from "@mui/material/Badge";
 import { styled } from "@mui/material/styles";
 import { getCarts } from "../cart/get-carts";
+import { notoSerif } from "../constants/fonts";
 
 interface HeaderProps {
   logout: () => Promise<void>;
@@ -67,24 +68,25 @@ export default function Header({ logout }: HeaderProps) {
   const pages = isAuthenticated ? routes : unauthenticatedRoutes;
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" className="!bg-transparent !shadow-none border-b !border-b-[#f1edea]">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <ShoppingBasketIcon
             sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+            className="!text-[#181510] dark:!text-[#ffffff]"
           />
           <Typography
             variant="h6"
             noWrap
             component={Link}
             href="/"
+            className="!text-[#181510] dark:!text-[#ffffff]"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
+              fontFamily: notoSerif.style.fontFamily,
               fontWeight: 700,
               letterSpacing: ".3rem",
-              color: "inherit",
               textDecoration: "none",
             }}
           >
@@ -99,6 +101,7 @@ export default function Header({ logout }: HeaderProps) {
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
               color="inherit"
+              className="!text-[#181510] dark:!text-[#ffffff]"
             >
               <MenuIcon />
             </IconButton>
@@ -135,20 +138,21 @@ export default function Header({ logout }: HeaderProps) {
           </Box>
           <ShoppingBasketIcon
             sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
+            className="!text-[#181510] dark:!text-[#ffffff]"
           />
           <Typography
             variant="h5"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="/"
+            className="!text-[#181510] dark:!text-[#ffffff]"
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
               flexGrow: 1,
-              fontFamily: "monospace",
+              fontFamily: notoSerif.style.fontFamily,
               fontWeight: 700,
               letterSpacing: ".3rem",
-              color: "inherit",
               textDecoration: "none",
             }}
           >
@@ -162,7 +166,13 @@ export default function Header({ logout }: HeaderProps) {
                   router.push(page.path);
                   handleCloseNavMenu();
                 }}
-                sx={{ my: 2, color: "white", display: "block" }}
+                className="!text-[#181510] dark:!text-[#ffffff]"
+                sx={{ my: 2, display: "block", 
+                  fontWeight: 500,       // tương đương font-medium
+                  fontSize: "0.875rem",  // tương đương text-sm
+                  fontFamily: notoSerif.style.fontFamily, // nếu dùng custom font
+                 }}
+                 
               >
                 {page.title}
               </Button>
@@ -170,7 +180,7 @@ export default function Header({ logout }: HeaderProps) {
           </Box>
           <Box sx={{ flexGrow: 0, mr: 2 }}>
             {isAuthenticated && (
-              <IconButton aria-label="cart" color="inherit" component={Link} href="/cart">
+              <IconButton aria-label="cart" color="inherit" component={Link} href="/cart" className="!text-[#181510] dark:!text-[#ffffff]">
                 <StyledBadge badgeContent={cartCount} color="secondary">
                   <ShoppingCartIcon />
                 </StyledBadge>

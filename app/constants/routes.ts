@@ -1,3 +1,4 @@
+
 export const unauthenticatedRoutes = [
     {
       title: "Login",
@@ -14,4 +15,8 @@ export const unauthenticatedRoutes = [
       title: "Home",
       path: "/",
     },
+    {
+      title: "Product",
+      path: "/products"
+    }
   ];

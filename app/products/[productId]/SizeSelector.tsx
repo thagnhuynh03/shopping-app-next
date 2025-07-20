@@ -30,6 +30,7 @@ export default function SizeSelector({ sizes, selected, onChange, disabledSizes 
             '&.Mui-selected': {
               backgroundColor: 'white',
               color: 'black',
+              border: '1px solid #181510',
               boxShadow: 2,
             },
             '&:not(.Mui-selected)': {

@@ -31,7 +31,7 @@ export default function ColorSelector({ colors, onChange }: ColorSelectorProps) 
             fontWeight: 'bold',
             '&.Mui-selected': {
               backgroundColor: 'white',
-              color: 'black',
+              border: '1px solid #181510',
               boxShadow: 2,
             },
             '&:not(.Mui-selected)': {

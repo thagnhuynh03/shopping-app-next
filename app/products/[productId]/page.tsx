@@ -9,7 +9,7 @@ export default async function SingleProductPage({ params }: {params: Promise<{ p
   const images = getProductImages(product.id);
 
   async function handleAddToCart(productSizeId: number, quantity: number, price: number) {
-    'use server';
+    "use server";
     return await addToCart(productSizeId, quantity, price);
   }
 

@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fbfaf9;
+  --foreground: #181510;
 }
 
 @theme inline {
@@ -14,13 +14,31 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #1f1a14;
+    --foreground: #ffffff;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--background) !important;
+  color: var(--foreground) !important;
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.ant-tabs-tab-btn {
+  color: #8a745c;
+  font-family: var(--font-noto-serif), sans-serif;
+}
+
+:where(.ant-tabs-tab.ant-tabs-tab-active) .ant-tabs-tab-btn {
+  color: var(--foreground) !important;
+}
+
+:where(.ant-tabs-ink-bar) {
+  background-color: #8a745c !important;
+}
+
+.ant-tabs-nav {
+  padding-left: 15px;
+}
+

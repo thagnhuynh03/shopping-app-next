@@ -16,6 +16,7 @@ export interface CartItem {
         };
       };
       size?: {
+        id: number;
         name: string;
       };
       product?: {
@@ -23,4 +24,14 @@ export interface CartItem {
         name: string;
       };
     };
+    availableColorsForSize?: {
+      colorName: string;
+      productSizeId: number;
+      stock: number;
+    }[];
+    availableSizesForColor?: {
+      sizeName: string;
+      productSizeId: number;
+      stock: number;
+    }[];
   }

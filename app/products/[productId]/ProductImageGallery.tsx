@@ -11,7 +11,7 @@ export default function ProductImageGallery({ images }: ProductImageGalleryProps
   const [selected, setSelected] = useState(0);
 
   return (
-    <Box boxShadow={1} display="flex" flexDirection="column" alignItems="center">
+    <Box display="flex" flexDirection="column" alignItems="center" bgcolor="transparent">
       <Image
         src={images[selected]}
         width={400}

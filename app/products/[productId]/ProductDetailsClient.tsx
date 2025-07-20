@@ -6,6 +6,7 @@ import SizeSelector from "./SizeSelector";
 import QuantitySelector from "./QuantitySelector";
 import ColorSelector from "./ColorSelector";
 import { Product } from "../interfaces/product.interface";
+import { notoSerif } from "@/app/constants/fonts";
 
 type ProductColor = {
   id: number;
@@ -41,8 +42,6 @@ export default function ProductDetailsClient({ product, images, addToCart }: Pro
 
   // Sort sizes in order S, M, L, XL
   const sizeOrder = ["S", "M", "L", "XL"];
-  console.log("Colors:", product.colors);
-  console.log(selectedColorId);
 
   // If no color selected, show all sizes from all colors
   let allSizes: string[] = [];
@@ -65,11 +64,9 @@ export default function ProductDetailsClient({ product, images, addToCart }: Pro
   const disabledSizes = selectedColor
     ? selectedColor.sizes.filter((s: ProductSize) => s.stock === 0).map((s: ProductSize) => s.name) || []
     : allDisabledSizes;
-  console.log("Product sizename " + selectedSizeName);
-  console.log("Color" + selectedColor);
   // Find the selected ProductSize object (to get id and price)
   const selectedProductSize = selectedColor?.sizes.find((s: ProductSize) => s.name === selectedSizeName);
-  console.log("Product size " + selectedProductSize);
+
   const handleAddToCart = async () => {
     if (!selectedProductSize) return;
     setLoading(true);
@@ -91,7 +88,7 @@ export default function ProductDetailsClient({ product, images, addToCart }: Pro
   };
 
   return (
-    <Grid container marginBottom={"2rem"} rowGap={3} spacing={4}>
+    <Grid container marginBottom={"2rem"} rowGap={3} spacing={4} >
       {/* Image and thumbnails */}
       {product.imageExists && (
         <Grid size={{ xs: 12, md: 6 }}>
@@ -101,9 +98,9 @@ export default function ProductDetailsClient({ product, images, addToCart }: Pro
       {/* Product Info */}
       <Grid size={{ xs: 12, md: 6 }}>
         <Stack gap={2}>
-          <Typography variant="h4" fontWeight={700}>{product.name}</Typography>
-          <Typography color="text.secondary">{product.description}</Typography>
-          <Typography variant="h5">${selectedProductSize?.price ?? product.price}</Typography>
+          <Typography variant="h4" fontWeight={700} fontFamily={notoSerif.className}>{product.name}</Typography>
+          <Typography color="#97734e" fontFamily={notoSerif.className}>{product.description}</Typography>
+          <Typography variant="h5" fontFamily={notoSerif.className}>${selectedProductSize?.price ?? product.price}</Typography>
           {/* Color Selector */}
           <Box>
             <Typography variant="h6" fontWeight='bold' mb={1}>Color</Typography>
@@ -135,9 +132,11 @@ export default function ProductDetailsClient({ product, images, addToCart }: Pro
               <Button
                 fullWidth
                 variant="contained"
-                color="primary"
                 size="large"
-                sx={{ borderRadius: 2 }}
+                sx={{ borderRadius: 2,
+                      backgroundColor: '#f3e8dc', // màu nền (nâu vintage chẳng hạn)
+                      color: '#181510',
+                }}
                 disabled={!selectedProductSize || selectedProductSize.stock === 0 || loading}
                 onClick={handleAddToCart}
               >

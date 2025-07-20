@@ -8,6 +8,7 @@ export async function getCarts(): Promise<CartItem[]> {
 }
 
 export async function addToCart(productSizeId: number, quantity: number, price: number) {
+  "use server";
   const result = await post("cart", { productSizeId, quantity, price });
   revalidateTag("cart");
   return result;
@@ -19,4 +20,8 @@ export async function removeFromCart(cartItemId: number) {
 
 export async function updateCartQuantity(cartItemId: number, quantity: number) {
   return await put("cart", { cartItemId, quantity });
+}
+
+export async function updateCartItemProductSize(cartItemId: number, newProductSizeId: number) {
+  return await put("cart/product-size", { cartItemId, newProductSizeId });
 }

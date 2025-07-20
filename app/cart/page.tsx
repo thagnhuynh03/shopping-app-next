@@ -13,6 +13,8 @@ import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { Box, Typography } from "@mui/material";
 import { CartItem } from "./interface/cart.interface";
+import CartColorSelector from "./CartColorSelector";
+import CartSizeSelector from "./CartSizeSelector";
 
 function ccyFormat(num: number) {
   return `${num.toFixed(2)}`;
@@ -34,6 +36,12 @@ async function handleUpdateQuantity(formData: FormData) {
     revalidatePath("/cart");
   }
 }
+
+// async function handleColorChange(cartItemId: number, newProductSizeId: number) {
+//   'use server';
+//   await updateCartItemProductSize(cartItemId, newProductSizeId);
+//   revalidatePath('/cart');
+// }
 
 export default async function CartPage() {
   const cart = await getCarts();
@@ -62,6 +70,9 @@ export default async function CartPage() {
       quantity: item.quantity,
       price: item.price,
       total: item.price * item.quantity,
+      availableColorsForSize: item.availableColorsForSize || [],
+      currentProductSizeId: item.productSizeId,
+      availableSizesForColor: item.availableSizesForColor || [],
     };
   });
 
@@ -93,8 +104,20 @@ export default async function CartPage() {
                   <Image src={row.image} alt={row.name} width={60} height={60} style={{ objectFit: "cover", borderRadius: 4 }} />
                 </TableCell>
                 <TableCell>{row.name}</TableCell>
-                <TableCell>{row.color}</TableCell>
-                <TableCell>{row.size}</TableCell>
+                <TableCell>
+                  <CartColorSelector
+                    cartItemId={row.id}
+                    currentProductSizeId={row.currentProductSizeId}
+                    availableColorsForSize={row.availableColorsForSize}
+                  />
+                </TableCell>
+                <TableCell>
+                  <CartSizeSelector
+                    cartItemId={row.id}
+                    currentProductSizeId={row.currentProductSizeId}
+                    availableSizesForColor={row.availableSizesForColor}
+                  />
+                </TableCell>
                 <TableCell align="right">
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'flex-end' }}>
                     <form action={handleUpdateQuantity} style={{ display: 'inline' }}>
