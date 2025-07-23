@@ -21,10 +21,10 @@ export default function ProductFilter() {
     const [selectedSort, setSelectedSort] = useState<string>('Tiêu biểu');
 
     const dropdownConfig = [
-        { key: 'size', label: 'Kích cỡ', options: sizeOptions },
-        { key: 'category', label: 'Danh mục', options: categoryOptions },
-        { key: 'color', label: 'Màu sắc', options: colorOptions },
-        { key: 'price', label: 'Giá', options: priceOptions },
+        { key: 'size', label: 'Sizes', options: sizeOptions },
+        { key: 'category', label: 'Categories', options: categoryOptions },
+        { key: 'color', label: 'Colors', options: colorOptions },
+        { key: 'price', label: 'Price', options: priceOptions },
     ];
 
     const handleChange = (key: keyof typeof selected, values: string[]) => {
@@ -90,7 +90,7 @@ export default function ProductFilter() {
             popupRender={() => renderMenu(key as keyof typeof selected, options)}
             trigger={['click']}
         >
-            <Button className="!bg-[#f3ede7] border !border-[#cbb89d] !rounded-2xl px-4 py-1 !font-medium hover:!border-[#a0895e] hover:!text-[#a0895e]">
+            <Button className="!bg-[#f3ede7] dark:!bg-[#473624] dark:!text-[#ffffff] !border-none !rounded-2xl px-4 py-1 !font-medium hover:!border-[#a0895e] hover:!text-[#a0895e]">
             {renderLabel(key as keyof typeof selected, label)} <DownOutlined />
             </Button>
         </Dropdown>
@@ -98,7 +98,7 @@ export default function ProductFilter() {
     </div>
     <div>
         <Dropdown menu={{ items: sortItems, onClick: handleSortClick }} trigger={['click']}>
-        <Button className="!border-none px-4 py-1 !text-lg !font-semibold hover:!border-[#a0895e] hover:!text-[#a0895e]">
+        <Button className="!border-none !bg-transparent dark:!text-[#ffffff] px-4 py-1 !text-lg !font-semibold hover:!border-[#a0895e] hover:!text-[#a0895e]">
             <FaArrowsDownToLine /> Sắp xếp theo
         </Button>
         </Dropdown>

@@ -83,7 +83,7 @@ export default async function CartPage() {
       <Typography variant="h4" component="h1" sx={{ mt: 4, mb: 2, fontWeight: 'bold', textAlign: 'center' }}>
         Shopping Cart
       </Typography>
-      <TableContainer component={Paper} sx={{ mt: 4 }}>
+      <TableContainer component={Paper} sx={{ mt: 4, background: "none" }}>
         <Table sx={{ minWidth: 700 }} aria-label="cart table">
           <TableHead>
             <TableRow>
@@ -91,10 +91,10 @@ export default async function CartPage() {
               <TableCell>Product</TableCell>
               <TableCell>Color</TableCell>
               <TableCell>Size</TableCell>
-              <TableCell align="right">Quantity</TableCell>
-              <TableCell align="right">Price</TableCell>
-              <TableCell align="right">Total</TableCell>
-              <TableCell align="center"></TableCell>
+              <TableCell>Quantity</TableCell>
+              <TableCell>Price</TableCell>
+              <TableCell>Total</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -123,22 +123,25 @@ export default async function CartPage() {
                     <form action={handleUpdateQuantity} style={{ display: 'inline' }}>
                       <input type="hidden" name="cartItemId" value={row.id} />
                       <input type="hidden" name="quantity" value={row.quantity - 1} />
-                      <button type="submit" style={{ border: '1px solid #ccc', background: '#1e1e1e', borderRadius: 4, cursor: row.quantity === 1 ? 'not-allowed' : 'pointer', padding: '2px 8px' }} disabled={row.quantity === 1}>-</button>
+                      <button type="submit" style={{ border: '1px solid #ccc', background: '#fffff', borderRadius: 4, cursor: row.quantity === 1 ? 'not-allowed' : 'pointer', padding: '2px 8px' }} disabled={row.quantity === 1}
+                              className="dark:bg-[#2c2c2c] dark:text-[#f5f5f5]">-</button>
                     </form>
-                    <span style={{ minWidth: 24, textAlign: 'center', display: 'inline-block' }}>{row.quantity}</span>
+                    <span style={{ minWidth: 24, textAlign: 'center', display: 'inline-block' }}
+                          className="dark:text-[#f5f5f5]">{row.quantity}</span>
                     <form action={handleUpdateQuantity} style={{ display: 'inline' }}>
                       <input type="hidden" name="cartItemId" value={row.id} />
                       <input type="hidden" name="quantity" value={row.quantity + 1} />
-                      <button type="submit" style={{ border: '1px solid #ccc', background: '#1e1e1e', borderRadius: 4, cursor: 'pointer', padding: '2px 8px' }}>+</button>
+                      <button type="submit" style={{ border: '1px solid #ccc', background: '#fffff', borderRadius: 4, cursor: 'pointer', padding: '2px 8px' }}
+                              className="dark:bg-[#2c2c2c] dark:text-[#f5f5f5]">+</button>
                     </form>
                   </div>
                 </TableCell>
-                <TableCell align="right">${ccyFormat(row.price)}</TableCell>
-                <TableCell align="right">${ccyFormat(row.total)}</TableCell>
-                <TableCell align="center">
+                <TableCell sx={{ color: "#00c896" }}>${ccyFormat(row.price)}</TableCell>
+                <TableCell sx={{ color: "#00c896" }}>${ccyFormat(row.total)}</TableCell>
+                <TableCell>
                   <form action={handleRemoveCartItem}>
                     <input type="hidden" name="cartItemId" value={row.id} />
-                    <button type="submit" style={{ color: 'red', border: 'none', background: 'none', cursor: 'pointer' }}>Remove</button>
+                    <button type="submit" style={{ color: '#ff4d4f', border: 'none', background: 'none', cursor: 'pointer' }}>Remove</button>
                   </form>
                 </TableCell>
               </TableRow>
@@ -146,19 +149,19 @@ export default async function CartPage() {
             <TableRow>
               <TableCell rowSpan={3} />
               <TableCell colSpan={5}>Subtotal</TableCell>
-              <TableCell align="right">${ccyFormat(subtotal)}</TableCell>
+              <TableCell sx={{ color: "#00c896" }}>${ccyFormat(subtotal)}</TableCell>
               <TableCell />
             </TableRow>
             <TableRow>
               <TableCell colSpan={5}><b>Total</b></TableCell>
-              <TableCell align="right"><b>${ccyFormat(subtotal)}</b></TableCell>
+              <TableCell sx={{ color: "#00c896" }}><b>${ccyFormat(subtotal)}</b></TableCell>
               <TableCell />
             </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 24 }}>
-        <Link href="/checkout" style={{ padding: '8px 24px', background: '#1976d2', color: '#fff', border: 'none', borderRadius: 4, fontWeight: 'bold', cursor: 'pointer', textDecoration: 'none', display: 'inline-block' }}>
+        <Link href="/checkout" style={{ padding: '8px 24px', background: '#1e90ff', color: '#fff', border: 'none', borderRadius: 4, fontWeight: 'bold', cursor: 'pointer', textDecoration: 'none', display: 'inline-block' }}>
           Checkout
         </Link>
       </div>

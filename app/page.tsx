@@ -197,7 +197,7 @@ export default function Home(
 
         {/* See All Button */}
         <div className="flex justify-center py-6">
-          <Button className="bg-[#f3e8dc] hover:!text-[#8a745c] hover:!border-[#8a745c] text-black ">See All</Button>
+          <Button type="default" className="">See All</Button>
         </div>
       </div>
     </div>

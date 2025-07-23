@@ -16,7 +16,9 @@ export default function ProductsPagination({ totalPages, currentPage }: { totalP
   return (
     <>
       {totalPages > 1 && (
-        <Stack direction="row" justifyContent="center" mt={4}>
+        <Stack direction="row" justifyContent="center" mt={4}
+          className="dark:!text-white"
+          >
           <Pagination
             page={currentPage}
             count={totalPages}
