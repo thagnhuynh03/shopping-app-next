@@ -124,17 +124,17 @@ export default function Checkout({ cart, addresses }: CheckoutProps) {
       )}
       {loading ?? <Loader />}
       <form action={formAction} onSubmit={() => setLoading(true)}>
-        <Box display="flex" gap={4} mt={4}>
+        <Box display="flex" gap={4} my={4}>
           {/* Left: Address & Payment */}
-          <Paper sx={{ flex: 2, p: 3 }}>
+          <Paper sx={{ flex: 2, p: 3, background: "none" }}>
             <AddressForm addresses={addresses} onChange={setAddressState} />
           </Paper>
-          <Paper sx={{ flex: 1, p: 3 }}>
+          <Paper sx={{ flex: 1, p: 3, background: "none" }}>
             <PaymentSelector value={paymentMethod} onChange={setPaymentMethod} />
           </Paper>
 
           {/* Right: Order Summary */}
-          <Paper sx={{ flex: 2, p: 3 }}>
+          <Paper sx={{ flex: 2, p: 3, background: "none" }}>
             <Typography variant="h6" mb={2}>Order ({cart.length} pruducts)</Typography>
             {cart.map((item: CartItem) => (
               <Box key={item.id} display="flex" alignItems="center" mb={2}>

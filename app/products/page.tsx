@@ -1,4 +1,4 @@
-import ProductCard from "../components/productCard";
+import { ProductCard } from "../components/productCard";
 import { API_URL } from "../constants/api";
 import { notoSerif } from "../constants/fonts";
 import getProducts from "./actions/get-products";
@@ -31,9 +31,9 @@ export default async function ProductsPage(
                  {products.map((item, i) => (
                    <ProductCard
                      key={i}
-                     title={item.name}
-                     price={`$${item.price}`}
-                     salePrice={""}
+                     id={item.id}
+                     name={item.name}
+                     price={item.price}
                      image={`${API_URL}/images/products/${item.id}.jpg`}
                    />
                  ))}

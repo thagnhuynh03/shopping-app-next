@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { CssBaseline, Container } from "@mui/material"
-import Header from "./components/header";
+import  { Header } from "./components/headerNew";
 import Providers from "./providers";
 import authenticated from "./auth/authenticated";
 import logout from "./auth/logout";
 import { notoSerif } from "./constants/fonts";
 import Footer from "./components/footer";
+import StyledComponentsRegistry from "./lib/registry";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -33,11 +33,11 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} ${notoSerif.variable} antialiased min-h-screen flex flex-col`}>
         <Providers authenticated={isAuthenticated}>
-            <CssBaseline />
-            <Header logout={logout} />
-            <Container className={`${isAuthenticated ? "mt-10" : ""} flex-grow`}>
-              {children}
-            </Container>
+            {/* <Header logout={logout} /> */}
+            <Header logout={logout}/>
+            <main className="flex-grow">
+              <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+            </main>
             <Footer />
         </Providers>
       </body>
