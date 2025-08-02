@@ -7,6 +7,7 @@ import { PromotionalCampaigns } from "./components/Campaign";
 import { TodaysPicks } from "./components/todayPick";
 import { CategorySection } from "./components/category";
 import { CollectionSection } from "./components/collection";
+import { Newsletter } from "./components/newsLetter";
 
 // const categories = [
 //   'Shirts',
@@ -112,6 +113,7 @@ export default function Home(
       <TodaysPicks />
       <CategorySection />
       <CollectionSection />
+      <Newsletter />
     </div>
   );
 }

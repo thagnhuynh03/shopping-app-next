@@ -1,12 +1,12 @@
 "use client"
 
 import type React from "react"
-
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Carousel, Button } from "antd"
 import { LeftOutlined, RightOutlined } from "@ant-design/icons"
 import type { CarouselRef } from "antd/es/carousel"
-import { ArrowButton } from "./arrowButton"
+import Image from "next/image" // Import Next.js Image component
+import { ArrowButton } from "./customButton"
 
 interface Slide {
   id: number
@@ -15,6 +15,7 @@ interface Slide {
   subtitle: string
   cta: string
   ctaLink?: string
+  blurDataURL: string // Added for placeholder="blur"
 }
 
 const slides: Slide[] = [
@@ -25,6 +26,7 @@ const slides: Slide[] = [
     subtitle: "Discover unique pieces from the past, curated for today's fashion.",
     cta: "Shop Now",
     ctaLink: "/shop",
+    blurDataURL: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7", // Generic placeholder
   },
   {
     id: 2,
@@ -34,6 +36,7 @@ const slides: Slide[] = [
     subtitle: "Retro styles reimagined for the modern wardrobe.",
     cta: "Explore Collection",
     ctaLink: "/collections/summer",
+    blurDataURL: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7", // Generic placeholder
   },
   {
     id: 3,
@@ -43,11 +46,17 @@ const slides: Slide[] = [
     subtitle: "Get up to 40% off on selected vintage items this week.",
     cta: "Shop Sale",
     ctaLink: "/sale",
+    blurDataURL: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7", // Generic placeholder
   },
 ]
 
 export function HeroCarousel() {
   const carouselRef = useRef<CarouselRef>(null)
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handlePrevious = () => {
     carouselRef.current?.prev()
@@ -65,7 +74,8 @@ export function HeroCarousel() {
   }
 
   const carouselSettings = {
-    autoplay: true,
+    autoplay: true, // Changed from {dotDuration: true} as it's not a valid prop for Ant Design Carousel
+    draggable: true, // Corrected from 'dradable'
     autoplaySpeed: 5000,
     dots: true,
     infinite: true,
@@ -76,7 +86,7 @@ export function HeroCarousel() {
     pauseOnHover: true,
     pauseOnFocus: true,
     accessibility: true,
-    arrows: false,
+    arrows: false, // We'll use custom arrows
   }
 
   return (
@@ -85,6 +95,7 @@ export function HeroCarousel() {
         ref={carouselRef}
         {...carouselSettings}
         dotPosition="bottom"
+        effect="fade"
         className="h-full"
         style={
           {
@@ -96,12 +107,14 @@ export function HeroCarousel() {
       >
         {slides.map((slide) => (
           <div key={slide.id} className="relative h-[500px] md:h-[600px] lg:h-[700px]">
-            {/* Background Image */}
-            <div
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-              style={{
-                backgroundImage: `url(${slide.imageUrl})`,
-              }}
+            {/* Background Image using next/image */}
+            <Image
+              src={slide.imageUrl || "/placeholder.svg"}
+              alt={slide.title}
+              fill
+              className="object-cover transition-transform duration-700"
+              placeholder="blur"
+              blurDataURL={slide.blurDataURL}
             />
 
             {/* Overlay */}
@@ -136,21 +149,22 @@ export function HeroCarousel() {
       </Carousel>
 
       {/* Custom Navigation Arrows */}
+      { isMounted &&
       <ArrowButton
         isDarkMode={true}
         type="primary"
-        icon={<LeftOutlined style={{ fontSize: '16px'}}/>}
+        icon={<LeftOutlined style={{ fontSize: "16px" }} />}
         onClick={handlePrevious}
         className="!absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20"
-      />
-
+      />}
+      {isMounted && 
       <ArrowButton
         isDarkMode={true}
         type="primary"
-        icon={<RightOutlined style={{ fontSize: '16px'}}/>}
+        icon={<RightOutlined style={{ fontSize: "16px" }} />}
         onClick={handleNext}
         className="!absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20"
-      />
+      />}
     </div>
   )
 }

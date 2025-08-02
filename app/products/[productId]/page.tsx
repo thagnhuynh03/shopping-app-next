@@ -1,7 +1,7 @@
 import getProduct from "./get-product";
 import { getProductImages } from "../product-image";
-import ProductDetailsClient from "./ProductDetailsClient";
 import { addToCart } from "../../cart/get-carts";
+import { ProductDetailsClient } from "./ProductDetailsClient";
 
 export default async function SingleProductPage({ params }: {params: Promise<{ productId: string }>}) {
   const { productId } = await params;

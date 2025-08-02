@@ -3,12 +3,16 @@
 import { useContext } from "react"
 import { Row, Col, Typography, Space, Divider } from "antd"
 import { ThemeContext } from "../theme-context"
-import { contactInfo, footerQuickLinks, footerSupportLinks, socialMediaLinks } from "../constants/routes"
+import { contactInfo, footerQuickLinks, footerSupportLinks, socialMediaLinks, unauthenticatedRoutes } from "../constants/routes"
+import { usePathname } from "next/navigation"
 
 const { Title, Text } = Typography
 
 export default function Footer() {
   const { isDarkMode } = useContext(ThemeContext)
+  const path = usePathname()
+
+  const isDisplayFooterRoute = unauthenticatedRoutes.some((route) => route.path === path);
 
   const footerStyle = {
     backgroundColor: isDarkMode ? "#27272a" : "#F4F4F4",
@@ -16,7 +20,7 @@ export default function Footer() {
   }
 
   return (
-    <footer style={footerStyle} className="mt-10">
+    <footer style={footerStyle} className={`${isDisplayFooterRoute && "hidden"} mt-10`}>
       <div className="container mx-auto px-4">
         <Row gutter={[32, 32]}>
           {/* About Section */}

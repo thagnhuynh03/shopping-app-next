@@ -5,7 +5,6 @@ import { API_URL } from "@/app/constants/api";
 import { getErrorMessage } from "@/app/until/errors";
 import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 export default async function login(_prevState: FormResponse, formData: FormData){
     const res = await fetch(`${API_URL}/auth/login`, {
@@ -30,5 +29,5 @@ export default async function login(_prevState: FormResponse, formData: FormData
           expires: new Date(jwtDecode(token).exp! * 1000),
         });
       }
-      redirect("/");
+      return { error: ""}
 }

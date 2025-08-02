@@ -23,14 +23,14 @@ export default async function ProductsPage(
     const { products, total } = await getProducts({ page });
     const totalPages = Math.ceil(total / PAGE_SIZE);
     return (
-        <div className={`${notoSerif.className} min-h-screen`}>
+        <div className={`${notoSerif.className} min-h-screen sm:px-12 mt-10`}>
             <h1 className="text-4xl">Products</h1>
             <ProductFilter />
             {products?.length > 0 ? (
-                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 px-4 mt-5">
-                 {products.map((item, i) => (
+                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-5">
+                 {products.map((item) => (
                    <ProductCard
-                     key={i}
+                     key={item.id}
                      id={item.id}
                      name={item.name}
                      price={item.price}

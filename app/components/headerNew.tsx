@@ -1,6 +1,6 @@
 "use client"
 
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import { Dropdown, Menu, Button, Badge, Drawer, Space } from "antd"
 import {
   SearchOutlined,
@@ -15,8 +15,11 @@ import { useState } from "react"
 import Link from "next/link"
 import { ThemeContext } from "../theme-context"
 import { AuthContext } from "../auth/auth-context"
-import { useRouter } from "next/navigation" // Import useRouter
+import { usePathname, useRouter } from "next/navigation" // Import useRouter
 import { SearchBar } from "./searchBar"
+import { unauthenticatedRoutes } from "../constants/routes"
+import Loader from "./loader"
+import { getCarts } from "../cart/get-carts"
 
 interface HeaderProps {
   logout: () => Promise<void>;
@@ -25,9 +28,31 @@ interface HeaderProps {
 export function Header({ logout }: HeaderProps) {
   const isAuthenticated = useContext(AuthContext)
   const { isDarkMode, toggleTheme } = useContext(ThemeContext)
+  const path = usePathname();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [showSearchBar, setShowSearchBar] = useState(false)
+  const [loading, setLoading] =  useState(false)
   const router = useRouter()
+  const [isMounted, setIsMounted] = useState(false)
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    async function fetchCartCount() {
+      try {
+        const data = await getCarts();
+        setCartCount(Array.isArray(data) ? data.length : 0);
+      } catch {
+        setCartCount(0);
+      }
+    }
+    fetchCartCount();
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const isDisplayHeaderRoute = unauthenticatedRoutes.some((route) => route.path === path);
 
   const accountMenuItems = [
     {
@@ -46,7 +71,9 @@ export function Header({ logout }: HeaderProps) {
       key: "logout",
       label: "Logout",
       onClick: async() =>{
+        setLoading(true)
         await logout()
+        setLoading(false)
       }
     },
   ]
@@ -182,7 +209,9 @@ export function Header({ logout }: HeaderProps) {
   }
 
   return (
-    <header className="w-full sticky top-0 z-50" style={headerStyle}>
+    <header className={`${isDisplayHeaderRoute && "hidden"} w-full sticky top-0 z-50`} style={headerStyle}>
+      {loading && <Loader />}
+      
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Mobile menu button */}
@@ -201,10 +230,11 @@ export function Header({ logout }: HeaderProps) {
           </div>
           {/* Desktop Navigation */}
           <nav className="hidden lg:block">
+          { isMounted && (
             <Space size="large" style={{ fontFamily: "serif" }}>
               <Link href="/">Home</Link>
               <Dropdown menu={{ items: shopMenuItems }} trigger={["hover", "click"]} placement="bottomLeft">
-                <Button type="text" className="hover:!text-amber-700 transition-colors" style={{ fontFamily: "serif" }}>
+                <Button type="text" onClick={() => router.push("/products")} className="hover:!text-amber-700 transition-colors" style={{ fontFamily: "serif" }}>
                   Shop
                 </Button>
               </Dropdown>
@@ -220,9 +250,10 @@ export function Header({ logout }: HeaderProps) {
               </Dropdown>
               <Link href="/about">About</Link>
             </Space>
+            )}
           </nav>
           {/* Icons */}
-          <Space>
+          { isMounted ? (<Space>
             <Button
               type="text"
               icon={
@@ -241,8 +272,9 @@ export function Header({ logout }: HeaderProps) {
             />
             {isAuthenticated && <Button type="text" icon={<HeartOutlined style={{ fontSize: "18px" }} />} />}
             {isAuthenticated && (
-              <Badge count={3} size="small">
-                <Button type="text" icon={<ShoppingOutlined style={{ fontSize: "18px" }} />} />
+              <Badge count={cartCount} size="small">
+                <Button type="text" icon={<ShoppingOutlined style={{ fontSize: "18px" }} />} 
+                onClick={() => router.push("/cart")}/>
               </Badge>
             )}
             {isAuthenticated ? (
@@ -253,10 +285,11 @@ export function Header({ logout }: HeaderProps) {
               <Button
                 type="text"
                 icon={<UserOutlined style={{ fontSize: "18px" }} />}
-                onClick={() => router.push("/login")}
+                onClick={() => router.push("/auth/login")}
               />
             )}
-          </Space>
+            
+          </Space>) : <div></div> }
         </div>
       </div>
       {/* Mobile Navigation Drawer */}
@@ -290,6 +323,7 @@ export function Header({ logout }: HeaderProps) {
       </Drawer>
       {/* Search Bar */}
       <SearchBar isOpen={showSearchBar} onClose={() => setShowSearchBar(false)} isDarkMode={isDarkMode} />
+      
     </header>
   )
 }

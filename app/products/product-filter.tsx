@@ -2,7 +2,8 @@
 import { Dropdown, Button, Checkbox } from 'antd';
 import { DownOutlined, CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import { FaArrowsDownToLine } from "react-icons/fa6";
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { ThemeContext } from '../theme-context';
 
 const sizeOptions = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 const categoryOptions = ['Áo', 'Quần', 'Đầm', 'Phụ kiện'];
@@ -11,6 +12,7 @@ const priceOptions = ['< 200K', '200K - 500K', '500K - 1M', '> 1M'];
 const sortOptions = ['Tiêu biểu', 'Hàng mới về', 'Từ thấp đến cao', 'Từ cao đến thấp', 'Xếp hạng cao nhất'];
 
 export default function ProductFilter() {
+    const { isDarkMode } = useContext(ThemeContext);
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
     const [selected, setSelected] = useState({
         size: [] as string[],
@@ -32,13 +34,12 @@ export default function ProductFilter() {
     };
 
     const renderMenu = (key: keyof typeof selected, options: string[]) => (
-        <div className="p-5 bg-[#fdfaf6] w-auto rounded-2xl shadow-lg text-[#1a120f] font-serif">
-        <div className="flex justify-end mb-2">
+        <div className={`px-5 pt-2 pb-5 ${ isDarkMode ? "bg-[#32323e]" : "bg-[#FFFFFF]"}  w-auto rounded-2xl shadow-lg ${isDarkMode ? "text-[#FFFFFF]" : "text-[#27272A]"} font-serif`}>
+        <div className="flex justify-end">
             <Button
             type="text"
             icon={<CloseOutlined />}
             onClick={() => setOpenDropdown(null)}
-            className="text-[#4f453c] hover:text-black"
             />
         </div>
         <div className="mb-2 font-semibold text-base capitalize">{key}</div>
@@ -46,7 +47,7 @@ export default function ProductFilter() {
             <Checkbox.Group
             value={selected[key]}
             onChange={values => handleChange(key, values as string[])}
-            className="!grid grid-cols-2 justify-between"
+            className="!grid grid-cols-2 justify-between gap-2"
             >
             {options.map(opt => (
                 <Checkbox key={opt} value={opt}>
@@ -90,7 +91,7 @@ export default function ProductFilter() {
             popupRender={() => renderMenu(key as keyof typeof selected, options)}
             trigger={['click']}
         >
-            <Button className="!bg-[#f3ede7] dark:!bg-[#473624] dark:!text-[#ffffff] !border-none !rounded-2xl px-4 py-1 !font-medium hover:!border-[#a0895e] hover:!text-[#a0895e]">
+            <Button type='default' className="">
             {renderLabel(key as keyof typeof selected, label)} <DownOutlined />
             </Button>
         </Dropdown>
@@ -98,7 +99,7 @@ export default function ProductFilter() {
     </div>
     <div>
         <Dropdown menu={{ items: sortItems, onClick: handleSortClick }} trigger={['click']}>
-        <Button className="!border-none !bg-transparent dark:!text-[#ffffff] px-4 py-1 !text-lg !font-semibold hover:!border-[#a0895e] hover:!text-[#a0895e]">
+        <Button type='text' className="px-4 py-1 !text-lg !font-semibold">
             <FaArrowsDownToLine /> Sắp xếp theo
         </Button>
         </Dropdown>

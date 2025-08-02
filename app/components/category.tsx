@@ -9,7 +9,7 @@ import { LeftOutlined, RightOutlined } from "@ant-design/icons"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import { ThemeContext } from "../theme-context"
-import { ArrowButton } from "./arrowButton"
+import { ArrowButton } from "./customButton"
 
 const { Title } = Typography
 

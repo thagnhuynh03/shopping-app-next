@@ -1,62 +1,115 @@
-"use client";
-import { useState } from "react";
-import { IconButton, Box, TextField } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
+"use client"
+
+import { useContext, useState, useEffect } from "react"
+import { Button, InputNumber, Space } from "antd"
+import { MinusOutlined, PlusOutlined } from "@ant-design/icons"
+import { ThemeContext } from "../../theme-context"
 
 interface QuantitySelectorProps {
-  max?: number;
-  value?: number;
-  onChange?: (value: number) => void;
+  max: number
+  value: number
+  onChange: (value: number) => void
+  min?: number
+  size?: "small" | "middle" | "large"
+  disabled?: boolean
 }
 
-export default function QuantitySelector({ max = 99, value, onChange }: QuantitySelectorProps) {
-  const [internalQuantity, setInternalQuantity] = useState(1);
-  const quantity = value !== undefined ? value : internalQuantity;
+export function QuantitySelector({
+  max,
+  value,
+  onChange,
+  min = 1,
+  size = "large",
+  disabled = false,
+}: QuantitySelectorProps) {
+  const { isDarkMode } = useContext(ThemeContext)
+  const [internalValue, setInternalValue] = useState(value)
 
-  const setQuantity = (val: number) => {
-    if (onChange) onChange(val);
-    else setInternalQuantity(val);
-  };
+  useEffect(() => {
+    setInternalValue(value)
+  }, [value])
 
-  const handleIncrement = () => {
-    setQuantity(Math.min(max, quantity + 1));
-  };
+  const handleDecrease = () => {
+    if (internalValue > min && !disabled) {
+      const newValue = internalValue - 1
+      setInternalValue(newValue)
+      onChange(newValue)
+    }
+  }
 
-  const handleDecrement = () => {
-    setQuantity(Math.max(1, quantity - 1));
-  };
+  const handleIncrease = () => {
+    if (internalValue < max && !disabled) {
+      const newValue = internalValue + 1
+      setInternalValue(newValue)
+      onChange(newValue)
+    }
+  }
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(event.target.value) || 1;
-    setQuantity(Math.max(1, value));
-  };
+  const handleInputChange = (newValue: number | null) => {
+    if (newValue === null) return
+    const clampedValue = Math.max(min, Math.min(max, newValue))
+    setInternalValue(clampedValue)
+    onChange(clampedValue)
+  }
+
+  const isDecreaseDisabled = disabled || internalValue <= min
+  const isIncreaseDisabled = disabled || internalValue >= max
+
+  const buttonStyle = {
+    backgroundColor: isDarkMode ? "#27272a" : "#ffffff",
+    borderColor: isDarkMode ? "#3f3f46" : "#d9d9d9",
+    color: isDarkMode ? "#e4e4e7" : "#18181b",
+  }
+
+  const disabledButtonStyle = {
+    backgroundColor: isDarkMode ? "#1f1f23" : "#f5f5f5",
+    borderColor: isDarkMode ? "#2d2d30" : "#d9d9d9",
+    color: isDarkMode ? "#4a4a4a" : "#bfbfbf",
+  }
+
+  const inputStyle = {
+    backgroundColor: isDarkMode ? "#27272a" : "#ffffff",
+    borderColor: isDarkMode ? "#3f3f46" : "#d9d9d9",
+    color: isDarkMode ? "#e4e4e7" : "#18181b",
+  }
 
   return (
-    <Box display="inline-flex" alignItems='center' border={1} borderColor="divider" borderRadius={1}>
-      <IconButton size="small" onClick={handleDecrement} sx={{ width: 32, height: 39, borderRadius: 0 }}>
-        <RemoveIcon fontSize="small" />
-      </IconButton>
-      <TextField
-        value={quantity}
-        onChange={handleInputChange}
-        size="small"
-        sx={{
-            width: 50,
-          '& .MuiOutlinedInput-root': {
-            border: 'none',
-            borderRadius: 0,
-            textAlign: 'center',
-          },
-          '& .MuiOutlinedInput-input': {
-            textAlign: 'center',
-          },
-        }}
-        slotProps={{ htmlInput: { min: 1, style: { textAlign: 'center' }} }}
-      />
-      <IconButton size="small" sx={{ width: 32, height: 39, borderRadius: 0 }} onClick={handleIncrement}>
-        <AddIcon fontSize="small" />
-      </IconButton>
-    </Box>
-  );
-} 
+    <Space direction="vertical" size="small">
+      <Space.Compact>
+        <Button
+          icon={<MinusOutlined />}
+          onClick={handleDecrease}
+          disabled={isDecreaseDisabled}
+          size={size}
+          style={isDecreaseDisabled ? disabledButtonStyle : buttonStyle}
+          className="transition-all duration-200"
+          aria-label="Decrease quantity"
+        />
+        <InputNumber
+          value={internalValue}
+          onChange={handleInputChange}
+          min={min}
+          max={max}
+          size={size}
+          disabled={disabled}
+          controls={false}
+          style={{
+            width: 60,
+            paddingLeft: 12,
+            ...inputStyle
+          }}
+          aria-label="Quantity"
+        />
+        <Button
+          icon={<PlusOutlined />}
+          onClick={handleIncrease}
+          disabled={isIncreaseDisabled}
+          size={size}
+          style={isIncreaseDisabled ? disabledButtonStyle : buttonStyle}
+          className="transition-all duration-200"
+          aria-label="Increase quantity"
+        />
+      </Space.Compact>
+    </Space>
+  )
+}

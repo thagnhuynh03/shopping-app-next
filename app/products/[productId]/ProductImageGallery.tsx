@@ -1,42 +1,62 @@
-"use client";
-import { useState } from "react";
-import Image from "next/image";
-import { Box } from "@mui/material";
+"use client"
+
+import { useState, useContext } from "react"
+import { ThemeContext } from "../../theme-context"
+import Image from "next/image"
 
 interface ProductImageGalleryProps {
-  images: string[];
+  images: string[]
 }
 
-export default function ProductImageGallery({ images }: ProductImageGalleryProps) {
-  const [selected, setSelected] = useState(0);
+export function ProductImageGallery({ images }: ProductImageGalleryProps) {
+  const { isDarkMode } = useContext(ThemeContext)
+  const [selectedIndex, setSelectedIndex] = useState(0)
+
+  const thumbnailStyle = (isSelected: boolean) => ({
+    backgroundColor: isDarkMode ? "#27272a" : "#ffffff",
+    border: `2px solid ${isSelected ? (isDarkMode ? "#fbbf24" : "#92400e") : isDarkMode ? "#3f3f46" : "#e5e7eb"}`,
+    borderRadius: "8px",
+    overflow: "hidden",
+    cursor: "pointer",
+    transition: "all 0.3s ease",
+    opacity: isSelected ? 1 : 0.7,
+  })
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" bgcolor="transparent">
+    <div className="w-full">
+      {/* Main Image */}
       <Image
-        src={images[selected]}
-        width={400}
+        src={images[selectedIndex] || "/placeholder.svg"}
+        alt={`Product image ${selectedIndex + 1}`}
+        width={600}
         height={400}
-        style={{ objectFit: "contain", background: '#fff' }}
-        className="w-full sm:w-3/4 h-auto"
-        sizes="100vw"
-        alt="Picture of the product"
-      />
+        className="object-cover p-4 w-full"
+        priority={selectedIndex === 0}
+        />
+
       {/* Thumbnails */}
-      <Box display="flex" gap={1} mt={2}>
-        {images.map((img, idx) => (
-          <Box
-            key={idx}
-            border={2}
-            borderColor={selected === idx ? "primary.main" : "#eee"}
-            borderRadius={1}
-            p={0.5}
-            sx={{ cursor: "pointer", opacity: selected === idx ? 1 : 0.7 }}
-            onClick={() => setSelected(idx)}
-          >
-            <Image src={img} width={60} height={60} alt={`Thumbnail ${idx+1}`} style={{ objectFit: "cover", borderRadius: 4 }} />
-          </Box>
-        ))}
-      </Box>
-    </Box>
-  );
-} 
+      {images.length > 1 && (
+        <div className="flex gap-2 justify-center">
+          {images.map((image, index) => (
+              <div
+                key={index}
+                style={thumbnailStyle(selectedIndex === index)}
+                onClick={() => setSelectedIndex(index)}
+                className="hover:opacity-100 transition-opacity duration-200"
+              >
+                <div className="relative aspect-square">
+                  <Image
+                    src={image || "/placeholder.svg"}
+                    alt={`Thumbnail ${index + 1}`}
+                    width={70}
+                    height={70}
+                    className="object-cover"
+                  />
+                </div>
+              </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}

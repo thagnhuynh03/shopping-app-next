@@ -5,6 +5,8 @@ import { Card, Button, Tag } from "antd"
 import { HeartOutlined, HeartFilled, ShoppingOutlined } from "@ant-design/icons"
 import Image from "next/image"
 import { ThemeContext } from "../theme-context"
+import { useRouter } from "next/navigation"
+import Loader from "./loader"
 
 interface ProductCardProps {
   id: number
@@ -18,6 +20,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({
+  id,
   name,
   price,
   originalPrice,
@@ -28,6 +31,8 @@ export function ProductCard({
 }: ProductCardProps) {
   const { isDarkMode } = useContext(ThemeContext)
   const [isWishlisted, setIsWishlisted] = useState(false)
+  const [isLoading, setLoading] = useState(false);
+  const router = useRouter()
 
   const discountPercentage = originalPrice ? Math.round(((originalPrice - price) / originalPrice) * 100) : 0
 
@@ -36,8 +41,14 @@ export function ProductCard({
   }
 
   return (
-    <Card
+    <>
+      {isLoading && <Loader/>}
+      <Card
       hoverable
+      onClick={() => {
+        setLoading(true)
+        router.push(`/products/${id}`)
+      }}
       className={`group w-full mx-auto transition-all duration-300 transform ${
         isDarkMode ? "bg-zinc-800 border-zinc-700" : "bg-white border-gray-200"
       }`}
@@ -112,5 +123,7 @@ export function ProductCard({
         }
       />
     </Card>
+    </>
+    
   )
 }

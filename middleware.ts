@@ -1,15 +1,13 @@
 import { NextRequest } from "next/server";
 
-const unauthorizedRoutes = ["/auth/login", "/auth/signup"];
+const unauthorizedRoutes = ["/auth/login", "/auth/signup", "/"];
 
 export function middleware(request: NextRequest) {
   const auth = request.cookies.get("Authentication")?.value;
-
   if (
     !auth &&
-    !unauthorizedRoutes.some((route) =>
-      request.nextUrl.pathname.startsWith(route)
-    )
+    !unauthorizedRoutes.includes(request.nextUrl.pathname) &&
+    !request.nextUrl.pathname.startsWith("/products")
   ) {
     return Response.redirect(new URL("/auth/login", request.url));
   }

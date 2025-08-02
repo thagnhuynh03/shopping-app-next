@@ -7,7 +7,7 @@ import Slider from "react-slick"
 import type { Settings } from "react-slick"
 import { ThemeContext } from "../theme-context"
 import { ProductCard } from "./productCard"
-import { ArrowButton } from "./arrowButton"
+import { ArrowButton } from "./customButton"
 
 const { Title, Text } = Typography
 
