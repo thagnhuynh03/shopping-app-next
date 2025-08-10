@@ -21,6 +21,11 @@ export const lightTheme = {
     },
     Menu: {
       padding: 8
+    },
+    Tag: {
+      fontSizeSM: 16,
+      borderRadiusSM: 20,
+      lineHeightSM: 2
     }
   }
 };
@@ -46,6 +51,11 @@ export const darkTheme = {
     },
     Menu: {
       padding: 8
+    },
+    Tag: {
+      fontSizeSM: 16,
+      borderRadiusSM: 20,
+      lineHeightSM: 2
     }
   }
 }

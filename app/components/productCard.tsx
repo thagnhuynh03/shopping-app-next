@@ -2,7 +2,7 @@
 
 import { useContext, useState } from "react"
 import { Card, Button, Tag } from "antd"
-import { HeartOutlined, HeartFilled, ShoppingOutlined } from "@ant-design/icons"
+import { HeartOutlined, HeartFilled } from "@ant-design/icons"
 import Image from "next/image"
 import { ThemeContext } from "../theme-context"
 import { useRouter } from "next/navigation"
@@ -64,8 +64,8 @@ export function ProductCard({
 
           {/* Badges */}
           <div className="absolute top-2 left-2 flex flex-col gap-2">
-            {isOnSale && discountPercentage > 0 && <Tag color="#D97706">-${discountPercentage}%</Tag>}
-            {isNew && <Tag color="#000">NEW</Tag>}
+            {isOnSale && discountPercentage > 0 && <Tag color="#D97706" style={{ borderRadius: 0}}>-${discountPercentage}%</Tag>}
+            {isNew && <Tag color="#000" style={{ borderRadius: 0}}>NEW</Tag>}
           </div>
 
           {/* Wishlist Button */}
@@ -73,12 +73,6 @@ export function ProductCard({
             <Button
               type="primary"
               icon={isWishlisted ? <HeartFilled /> : <HeartOutlined />}
-              onClick={handleWishlistToggle}
-              className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300`}
-            />
-            <Button
-              type="primary"
-              icon={<ShoppingOutlined />}
               onClick={handleWishlistToggle}
               className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300`}
             />
@@ -122,7 +116,7 @@ export function ProductCard({
           </div>
         }
       />
-    </Card>
+      </Card>
     </>
     
   )

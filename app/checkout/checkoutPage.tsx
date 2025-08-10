@@ -1,7 +1,5 @@
 "use client";
 import { useActionState, useState } from "react";
-import { Button, Box, Typography, Paper } from "@mui/material";
-import { getProductImage } from "../products/product-image";
 import AddressForm from "./AddressForm";
 import PaymentSelector from "./PaymentSelector";
 import createAddress from "./actions/create-address";
@@ -13,11 +11,10 @@ import removeCart from "./actions/remove-cart";
 import Loader from "../components/loader";
 import { CartItem } from "../cart/interface/cart.interface";
 import { Address } from "./interfaces/address.interface";
-import Image from "next/image";
 import { redirect } from "next/navigation";
 import { applyVoucher } from "./actions/apply-voucher";
-
-// Dummy data for payment methods and shipping
+import { Button, Col, message, Row } from "antd";
+import OrderSummary from "./orderSumary";
 
 const shippingFee = 1;
 
@@ -28,6 +25,7 @@ interface CheckoutProps {
 
 export default function Checkout({ cart, addresses }: CheckoutProps) {
   const [loading, setLoading] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
   // Voucher state
   const [voucher, setVoucher] = useState("");
   const [discount, setDiscount] = useState(0);
@@ -57,14 +55,30 @@ export default function Checkout({ cart, addresses }: CheckoutProps) {
       setLoading(true);
       let addressId = addressState.selectedAddressId;
       if (!addressId) {
-        const newAddress = await createAddress(addressState.formData);
+        const { city, district, ward, ...rest } = addressState.formData;
+
+        const newAddress = await createAddress({
+          ...rest,
+          city: Number(city),
+          district: Number(district),
+          ward: Number(ward),
+        });
+
         if (newAddress.error) {
           setLoading(false);
+          messageApi.error({
+            content: newAddress.error,
+            duration: 3,
+            style: {
+              position: "fixed",
+              top: 20,
+              left: 20
+            }
+          })
           return { error: newAddress.error };
         }
         addressId = newAddress.data.id;
       }
-      console.log(typeof discount);
       const orderData = {
         addressId: Number(addressId),
         paymentMethodId: paymentMethod,
@@ -77,14 +91,23 @@ export default function Checkout({ cart, addresses }: CheckoutProps) {
           price: Math.round(item.price),
         })),
       };
-      if (paymentMethod === 2){
-        
+      if (paymentMethod === 2) {
+
         const result = await createOrder(orderData);
         if (!result.error) {
           await removeCart();
           redirect("/order");
         }
         setLoading(false);
+        messageApi.error({
+          content: result.error,
+          duration: 3,
+          style: {
+            position: 'fixed',
+            top: 20,
+            left: 20
+          }
+        })
         return { error: result.error };
       }
       if (paymentMethod === 1) {
@@ -95,6 +118,15 @@ export default function Checkout({ cart, addresses }: CheckoutProps) {
           await stripe?.redirectToCheckout({ sessionId: session.data.id });
         }
         setLoading(false);
+        messageApi.error({
+          content: session.error,
+          duration: 3,
+          style: {
+            position: 'fixed',
+            top: 20,
+            left: 20
+          }
+        })
         return session;
       }
     },
@@ -109,96 +141,69 @@ export default function Checkout({ cart, addresses }: CheckoutProps) {
       setDiscount(result.data.discount);
       setVoucherId(result.data.voucherId);
     } else {
-        setDiscount(0);
-        setVoucherId(undefined);
-        setVoucherError(result.error);
+      setDiscount(0);
+      setVoucherId(undefined);
+      setVoucherError(result.error);
     }
   }
 
   return (
     <>
       {state?.error && (
-        <Alert variant="outlined" severity="warning">
+        <Alert variant="outlined" severity="warning" className="!hidden">
           {state.error}
         </Alert>
       )}
       {loading ?? <Loader />}
-      <form action={formAction} onSubmit={() => setLoading(true)}>
-        <Box display="flex" gap={4} my={4}>
-          {/* Left: Address & Payment */}
-          <Paper sx={{ flex: 2, p: 3, background: "none" }}>
-            <AddressForm addresses={addresses} onChange={setAddressState} />
-          </Paper>
-          <Paper sx={{ flex: 1, p: 3, background: "none" }}>
-            <PaymentSelector value={paymentMethod} onChange={setPaymentMethod} />
-          </Paper>
-
-          {/* Right: Order Summary */}
-          <Paper sx={{ flex: 2, p: 3, background: "none" }}>
-            <Typography variant="h6" mb={2}>Order ({cart.length} pruducts)</Typography>
-            {cart.map((item: CartItem) => (
-              <Box key={item.id} display="flex" alignItems="center" mb={2}>
-                <Image
-                  src={getProductImage(item.product?.color?.product?.id ?? 0)}
-                  alt={item.product?.color?.product?.name ?? "Product images"}
-                  width={48}
-                  height={48}
-                  style={{ marginRight: 8 }}
-                />
-                <Box>
-                  <Typography>{item.product?.color?.product?.name}</Typography>
-                  <Typography variant="body2" color="text.secondary">Size: {item.product?.size?.name}</Typography>
-                  <Typography variant="body2" color="text.secondary">Color: {item.product?.color?.color?.name}</Typography>
-                </Box>
-                <Box ml="auto">
-                  <Typography>${item.price.toLocaleString()}{item.quantity > 1 ? ` x${item.quantity}` : ""}</Typography>
-                </Box>
-              </Box>
-            ))}
-            {/* Voucher input */}
-            <Box display="flex" alignItems="center" mt={2} mb={1} gap={1}>
-              <input
-                type="text"
-                placeholder="Nhập mã giảm giá"
-                value={voucher}
-                onChange={e => setVoucher(e.target.value)}
-                style={{ flex: 1, padding: 8, borderRadius: 4, border: '1px solid #ccc' }}
+      {contextHolder}
+      <div className="w-full px-10 mt-5">
+        <form action={formAction} onSubmit={() => setLoading(true)}>
+          <Row gutter={[16, 24]}>
+            {/* Left Column - Address & Payment */}
+            <Col xs={24} lg={11}>
+              <AddressForm
+                addresses={addresses}
+                onChange={setAddressState}
               />
-              <Button
-                type="button"
-                variant="contained"
-                sx={{ ml: 1, minWidth: 100 }}
-                onClick={handleApplyVoucher}
-              >
-                Áp dụng
-              </Button>
-            </Box>
-            {voucherError && <Typography color="error" fontSize={13}>{voucherError}</Typography>}
-            {/* Summary */}
-            <Box display="flex" justifyContent="space-between" mt={2}>
-              <Typography>Subtotal</Typography>
-              <Typography>${subtotal.toLocaleString()}</Typography>
-            </Box>
-            <Box display="flex" justifyContent="space-between">
-              <Typography>Shipping fee</Typography>
-              <Typography>${shipping.toLocaleString()}</Typography>
-            </Box>
-            {discount > 0 && (
-              <Box display="flex" justifyContent="space-between">
-                <Typography color="primary">Discount</Typography>
-                <Typography color="primary">- ${discount.toLocaleString()}</Typography>
-              </Box>
-            )}
-            <Box display="flex" justifyContent="space-between" mt={2}>
-              <Typography fontWeight="bold">Total</Typography>
-              <Typography fontWeight="bold" color="primary">${total.toLocaleString()}</Typography>
-            </Box>
-            <Button fullWidth variant="contained" color="primary" sx={{ mt: 3 }} type="submit">
-              Place order
-            </Button>
-          </Paper>
-        </Box>
-      </form>
+            </Col>
+            <Col xs={24} lg={5}>
+              <PaymentSelector
+                value={paymentMethod}
+                onChange={setPaymentMethod}
+              />
+            </Col>
+
+            {/* Right Column - Order Summary */}
+            <Col xs={24} lg={8}>
+              <div className="flex flex-col justify-between h-full">
+                <OrderSummary
+                  cart={cart}
+                  subtotal={subtotal}
+                  shipping={shipping}
+                  discount={discount}
+                  total={total}
+                  voucher={voucher}
+                  voucherError={voucherError}
+                  onVoucherChange={setVoucher}
+                  onApplyVoucher={handleApplyVoucher}
+                />
+
+                <Button
+                  type="primary"
+                  size="large"
+                  htmlType="submit"
+                  loading={loading}
+                  className="w-full h-12 text-lg font-semibold mt-5"
+                  disabled={cart.length === 0}
+                >
+                  {loading ? 'Processing...' : `Place Order - $${total.toLocaleString()}`}
+                </Button>
+              </div>
+
+            </Col>
+          </Row>
+        </form>
+      </div>
     </>
   );
 }

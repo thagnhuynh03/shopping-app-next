@@ -203,7 +203,7 @@ export function ProductDetailsClient({ product, images, addToCart }: ProductDeta
         <Row gutter={[32, 32]} className="mt-8 mb-8">
           {/* Image Gallery */}
           {product.imageExists && (
-            <Col xs={24} md={12}>
+            <Col xs={24} md={12} className="max-h-screen">
               <ProductImageGallery images={images} />
             </Col>
           )}

@@ -1,18 +1,21 @@
-"use client";
-import React from "react";
-import { updateCartItemProductSize } from "./get-carts";
-import { useRouter } from "next/navigation";
+"use client"
+
+import { Select } from "antd"
+import { updateCartItemProductSize } from "./get-carts"
+import { useRouter } from "next/navigation"
+
+const { Option } = Select
 
 interface ColorOption {
-  colorName: string;
-  productSizeId: number;
-  stock: number;
+  colorName: string
+  productSizeId: number
+  stock: number
 }
 
 interface CartColorSelectorProps {
-  cartItemId: number;
-  currentProductSizeId: number;
-  availableColorsForSize: ColorOption[];
+  cartItemId: number
+  currentProductSizeId: number
+  availableColorsForSize: ColorOption[]
 }
 
 export default function CartColorSelector({
@@ -20,25 +23,25 @@ export default function CartColorSelector({
   currentProductSizeId,
   availableColorsForSize,
 }: CartColorSelectorProps) {
-  const router = useRouter();
+  const router = useRouter()
 
-  const handleChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newProductSizeId = Number(e.target.value);
-    await updateCartItemProductSize(cartItemId, newProductSizeId);
-    router.refresh(); // Refresh the page to show updated cart
-  };
+  const handleChange = async (newProductSizeId: number) => {
+    await updateCartItemProductSize(cartItemId, newProductSizeId)
+    router.refresh()
+  }
 
   return (
-    <select
+    <Select
       value={currentProductSizeId}
       onChange={handleChange}
-      style={{ minWidth: 120, padding: '4px 8px', borderRadius: 4 }}
+      style={{ minWidth: 120 }}
+      size="small"
     >
       {availableColorsForSize.map((colorOpt) => (
-        <option key={colorOpt.productSizeId} value={colorOpt.productSizeId}>
-          {colorOpt.colorName} (stock: {colorOpt.stock})
-        </option>
+        <Option key={colorOpt.productSizeId} value={colorOpt.productSizeId}>
+          {colorOpt.colorName}
+        </Option>
       ))}
-    </select>
-  );
+    </Select>
+  )
 }

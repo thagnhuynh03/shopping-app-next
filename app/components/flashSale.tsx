@@ -1,13 +1,14 @@
 "use client"
 
 import { useContext, useRef } from "react"
-import { Statistic, Typography } from "antd"
+import { Typography } from "antd"
 import { LeftOutlined, RightOutlined } from "@ant-design/icons"
 import Slider from "react-slick"
 import type { Settings } from "react-slick"
 import { ThemeContext } from "../theme-context"
 import { ProductCard } from "./productCard"
 import { ArrowButton } from "./customButton"
+import { CountdownTimerFlash } from "./timer"
 
 const { Title, Text } = Typography
 
@@ -75,10 +76,9 @@ const flashSaleProducts = [
 export function FlashSaleSection() {
   const { isDarkMode } = useContext(ThemeContext)
   const sliderRef = useRef<Slider>(null)
-  const { Timer } = Statistic;
 
   // Set end time for flash sale (24 hours from now)
-  const flashSaleEndTime = Date.now() + 24 * 60 * 60 * 1000
+  const flashSaleEndTime = Date.now() +  24.01 * 60 * 60 * 1000
 
   const handlePrevious = () => {
     sliderRef.current?.slickPrev()
@@ -145,13 +145,14 @@ export function FlashSaleSection() {
               >
                 Flash Sale
               </Title>
-              <div className="bg-amber-500 px-2 py-1">
-                <Timer type="countdown" value={flashSaleEndTime} onFinish={handleSaleEnd} />
-              </div>
             </div>
             <Text className="text-base md:text-lg block">
               Grab these deals before they&apos;re gone! Limited time offers with huge discounts.
             </Text>
+            {/* Countdown Timer */}
+            <div className= "mt-4">
+              <CountdownTimerFlash endTime={flashSaleEndTime} onEnd={handleSaleEnd} showCaption={true} />
+            </div>
           </div>
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">

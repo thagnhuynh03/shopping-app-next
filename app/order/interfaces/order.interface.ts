@@ -13,7 +13,7 @@ export interface OrderItem {
         product: {
           id: number;
           name: string;
-          description: string;
+          description?: string;
         };
       };
     };
@@ -28,9 +28,9 @@ export interface OrderItem {
       name: string;
       phoneNumber: string;
       address: string;
-      district: number;
-      ward: number;
-      city: number;
+      district: number | string;
+      ward: number | string;
+      city: number | string;
     };
     paymentMethod: {
       name: string;

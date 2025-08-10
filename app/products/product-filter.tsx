@@ -68,7 +68,7 @@ export default function ProductFilter() {
     key: option,
     label: (
       <div className="flex justify-between items-center">
-        {option}
+        {option}    
         {selectedSort === option && <CheckOutlined />}
       </div>
     ),
@@ -99,9 +99,9 @@ export default function ProductFilter() {
     </div>
     <div>
         <Dropdown menu={{ items: sortItems, onClick: handleSortClick }} trigger={['click']}>
-        <Button type='text' className="px-4 py-1 !text-lg !font-semibold">
-            <FaArrowsDownToLine /> Sắp xếp theo
-        </Button>
+            <Button type='text' className="px-4 py-1 !text-lg !font-semibold">
+                <FaArrowsDownToLine /> Sắp xếp theo
+            </Button>
         </Dropdown>
     </div>
   </div>

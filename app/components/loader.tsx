@@ -1,10 +1,19 @@
-"use client";
 import { Backdrop, CircularProgress } from "@mui/material";
+import { createPortal } from "react-dom";
 
 export default function Loader() {
-  return (
-    <Backdrop open sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+  if (typeof window === "undefined") return null; // avoid SSR issues
+
+  return createPortal(
+    <Backdrop
+      open
+      sx={{
+        color: '#fff',
+        zIndex: (theme) => theme.zIndex.modal + 1, // đảm bảo cao hơn mọi thứ
+      }}
+    >
       <CircularProgress color="inherit" />
-    </Backdrop>
+    </Backdrop>,
+    document.body // render ra toàn bộ body
   );
 }

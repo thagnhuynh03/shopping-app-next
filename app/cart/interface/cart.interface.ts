@@ -35,3 +35,26 @@ export interface CartItem {
       stock: number;
     }[];
   }
+
+export interface CartTableItem {
+  key: number;
+  id: number;
+  image: string;
+  name: string;
+  color: string;
+  size: string;
+  quantity: number;
+  price: number;
+  total: number;
+  availableColorsForSize: {
+    colorName: string;
+    productSizeId: number;
+    stock: number;
+  }[];
+  currentProductSizeId: number;
+  availableSizesForColor: {
+    sizeName: string;
+    productSizeId: number;
+    stock: number;
+  }[];
+}

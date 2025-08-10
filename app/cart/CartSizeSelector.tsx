@@ -1,18 +1,21 @@
-"use client";
-import React from "react";
-import { updateCartItemProductSize } from "./get-carts";
-import { useRouter } from "next/navigation";
+"use client"
+
+import { Select } from "antd"
+import { updateCartItemProductSize } from "./get-carts"
+import { useRouter } from "next/navigation"
+
+const { Option } = Select
 
 interface SizeOption {
-  sizeName: string;
-  productSizeId: number;
-  stock: number;
+  sizeName: string
+  productSizeId: number
+  stock: number
 }
 
 interface CartSizeSelectorProps {
-  cartItemId: number;
-  currentProductSizeId: number;
-  availableSizesForColor: SizeOption[];
+  cartItemId: number
+  currentProductSizeId: number
+  availableSizesForColor: SizeOption[]
 }
 
 export default function CartSizeSelector({
@@ -20,25 +23,28 @@ export default function CartSizeSelector({
   currentProductSizeId,
   availableSizesForColor,
 }: CartSizeSelectorProps) {
-  const router = useRouter();
+  const router = useRouter()
 
-  const handleChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newProductSizeId = Number(e.target.value);
-    await updateCartItemProductSize(cartItemId, newProductSizeId);
-    router.refresh();
-  };
+  const handleChange = async (newProductSizeId: number) => {
+    console.log(cartItemId)
+    console.log(newProductSizeId)
+    
+    await updateCartItemProductSize(cartItemId, newProductSizeId)
+    router.refresh()
+  }
 
   return (
-    <select
+    <Select
       value={currentProductSizeId}
       onChange={handleChange}
-      style={{ minWidth: 80, padding: '4px 8px', borderRadius: 4 }}
+      style={{ minWidth: 80 }}
+      size="small"
     >
       {availableSizesForColor.map((sizeOpt) => (
-        <option key={sizeOpt.productSizeId} value={sizeOpt.productSizeId}>
-          {sizeOpt.sizeName} (stock: {sizeOpt.stock})
-        </option>
+        <Option key={sizeOpt.productSizeId} value={sizeOpt.productSizeId}>
+          {sizeOpt.sizeName}
+        </Option>
       ))}
-    </select>
-  );
-} 
+    </Select>
+  )
+}

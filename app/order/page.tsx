@@ -17,23 +17,20 @@ export default async function OrderPage() {
 
   // Filter orders by status
   const pendingOrders = orders.filter(order => order.status === 'pending');
-  const waitingForDeliveryOrders = orders.filter(order => order.status === 'Waiting for delivery');
+  const processingOrders = orders.filter(order => order.status === 'processing');
   const shippingOrders = orders.filter(order => order.status === 'shipping');
   const deliveredOrders = orders.filter(order => order.status === 'delivered');
   const cancelledOrders = orders.filter(order => order.status === 'cancelled');
 
   return (
-    <Box sx={{ mt: 4, width: '100%', typography: 'body1' }}>
-      <Typography variant="h4" gutterBottom>
-        My Orders
-      </Typography>
+    <div className="min-h-screen">
       <OrderTabs
         pendingOrders={pendingOrders}
-        waitingForDeliveryOrders={waitingForDeliveryOrders}
+        processingOrders={processingOrders}
         shippingOrders={shippingOrders}
         deliveredOrders={deliveredOrders}
         cancelledOrders={cancelledOrders}
       />
-    </Box>
+    </div>
   );
 }
